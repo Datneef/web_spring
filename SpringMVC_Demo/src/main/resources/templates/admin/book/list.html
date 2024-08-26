@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Striped Rows</h2>
+
+    <div class="row justify-content-between">
+        <a class="btn btn-primary" th:href="@{/admin/books/create}">Create new book</a>
+        <form id="frmSearch" th:action="@{/admin/books}" class="d-flex" method="post">
+            <!--<input type="hidden" name="page" th:value="${param.page}"/>-->
+            <input name="keyword" class="form-control" placeholder="search..." th:value="${param.keyword}">
+            <input class="btn btn-primary" type="submit" value="Search">
+        </form>
+    </div>
+
+    <div th:if="${ message != null }">
+        <span class="alert alert-success" th:text="${message}"></span>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${page.content}">
+                <td th:text="${book.id}"></td>
+                <td th:text="${book.title}">Title</td>
+                <td>
+                    <img th:src="${book.image}" th:alt="${book.title}">
+                </td>
+                <td th:text="${book.price}"></td>
+                <td>
+<!--                <a class="btn btn-danger" th:href="@{/admin/books/delete(id=${book.id})}">Delete</a>-->
+                    <a class="btn btn-danger" th:href="@{/admin/books/delete/{id}(id=${book.id})}">Delete</a>
+                    <a class="btn btn-primary" th:href="@{/admin/books/edit(id=${book.id})}">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row justify-content-center mt-2">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li th:if="${page.hasPrevious()}" class="page-item"><a class="page-link" th:href="@{/admin/books(page=${page.getNumber()})}">Previous</a></li>
+                <th:block th:each="pageNum : ${pageNums}">
+                    <th:block th:if="${ pageNum == (page.getNumber() + 1) }">
+                        <li class="page-item active">
+                            <a class="page-link" th:href="@{/admin/books(page=${pageNum})}" th:text="${pageNum}"></a>
+                        </li>
+                    </th:block>
+
+                    <th:block th:if="${ pageNum != (page.getNumber() + 1) }">
+                        <li class="page-item">
+<!--                            <a class="page-link" th:onclick="'setUpPage(' + ${pageNum} + ')'" th:text="${pageNum}"></a>-->
+<!--                            <a class="page-link" th:href="@{/admin/books(page=${pageNum})}" th:text="${pageNum}"></a>-->
+                            <a class="page-link" th:href="@{/admin/books(page=${pageNum},keyword=${param.keyword})}" th:text="${pageNum}"></a>
+                        </li>
+                    </th:block>
+
+                </th:block>
+
+                <li th:if="${page.hasNext()}" class="page-item"><a class="page-link" th:href="@{/admin/books(page=${page.getNumber() + 2})}">Next</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+    <script>
+        function setUpPage(pageNumber) {
+            document.querySelector('input[name="page"]').value = pageNumber;
+            document.querySelector('#frmSearch').submit();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
+</head>
+<body>
+    <span th:text="${message}"></span>
+    <nav>
+        <a href="" th:text="#{home.label.home}"></a>
+        <a href="" th:text="#{home.label.about}"></a>
+        <a href="" th:text="#{home.label.contact}"></a>
+    </nav>
+
+    <section class="product_list">
+    </section>
+    <input type="hidden" name="contextPath" th:value="@{/}">
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

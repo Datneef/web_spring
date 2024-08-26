@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean name="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.spring.entities"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="sa"/>
+        <property name="password" value="Huygau91"/>
+        <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+        <property name="jdbcUrl" value="jdbc:sqlserver://localhost:1433;database=HN24_FJW01_SPRING;encrypt=true;trustServerCertificate=true"/>
+    </bean>
+
+    <bean name="transactionManagement" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+</beans>
